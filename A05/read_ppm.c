@@ -17,7 +17,7 @@ struct ppm_pixel* read_ppm(const char* filename, int* w, int* h) {
     return NULL;
     }
 
-  char format[4]; //3?
+  char format[4]; 
   fgets(format, sizeof(format), file); 
 
   char buffer[100];
@@ -38,7 +38,7 @@ struct ppm_pixel* read_ppm(const char* filename, int* w, int* h) {
 
   fread(pixels, sizeof(struct ppm_pixel), *w * *h, file);
   fclose(file);
-  return pixels; // Return pointer to pixel data
+  return pixels; 
 }
 
 struct ppm_pixel** read_ppm_2d(const char* filename, int* w, int* h) {

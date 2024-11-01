@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     printf("Failed to read the PPM file.\n");
     return 1;
     }
-  printf("Reading tiny_encoded.ppm with width %d and height %d", w, h);
+  printf("Reading %s with width %d and height %d", argv[1], w, h);
   printf("\n");
   int num_pixels = w * h;
   int total_bits = num_pixels * 3;

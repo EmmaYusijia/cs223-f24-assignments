@@ -9,8 +9,8 @@
 #include <stdlib.h>
 #include "read_ppm.h"
 #include "write_ppm.h"
-#include "read_ppm.c"
-#include "write_ppm.c"
+//#include "read_ppm.c"
+//#include "write_ppm.c"
 
 int main(int argc, char** argv) {
   int w, h;
