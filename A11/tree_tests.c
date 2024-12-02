@@ -26,7 +26,6 @@ int main (int argc, char* argv[])
   check(root->right == 0, "test 4: right is null");
 
   root = insert("A", root);
-
   check(strncmp(root->left->data.name, "A", 1) == 0, "test 5: name set correctly");
   check(root->right == 0, "test 6: right is null");
 
@@ -48,4 +47,5 @@ int main (int argc, char* argv[])
   clear(root);
   return 0;
 }
+
 

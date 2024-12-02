@@ -6,7 +6,7 @@
 #include <sys/time.h>
 #include "tree.h"
 
-struct tree_node* root = NULL;
+// struct tree_node* root = NULL;
 pthread_mutex_t mutex;
 
 struct thread_data {
@@ -17,26 +17,21 @@ struct thread_data {
 };
 
 void *tree(void *userdata){
-  // struct tree_node* root = NULL;
+  pthread_mutex_lock(&mutex);
+  struct tree_node* root = NULL;
   struct thread_data *data = (struct thread_data *) userdata;
-  // printf("start_index is %d\n", data->start_index);
-  // printf("end_index is %d\n", data->end_index);
   for(int i = data->start_index; i < data->end_index + 1; i++){
     FILE *file = fopen(data->files[i], "r");
     if (file == NULL) {
       printf("File %s is not valid\n", data->files[i]);
     }else{
-      pthread_mutex_lock(&mutex);
-      // printf("before insert: root - %s\n", root->data.name);
       root = insert(data->files[i], root);
-      // printf("inserting: %s root: %s\n", data->files[i], root->data.name);
-      // printf("processed: %s\n", data->files[i]);
-      // printf("after insert:\n");
-      // printSorted(root);
-      pthread_mutex_unlock(&mutex);
       fclose(file);
     }
   }
+  printf("sub: ");
+  printSorted(root);
+  pthread_mutex_unlock(&mutex);
   return NULL;
 }
 
@@ -65,7 +60,7 @@ int main(int argc, char *argv[]) {
   struct timeval tstart, tend;
   gettimeofday(&tstart, NULL);
   if (argc < 3) {
-    fprintf(stderr, "Usage: ./dependency <NumThreads> <Files>\n");
+    fprintf(stderr, "Usage: ./grep\n");
     return 1;
   }
   int fileNum = argc - 2;
@@ -115,10 +110,10 @@ int main(int argc, char *argv[]) {
     printf("$ ");
     scanf("%s", command);
     if(strcmp(command, "list") == 0){
-      // for(int i = 0; i < fileNum; i++){
-      //   printf("%s\n", files[i]);
-      // }
-      printSorted(root);
+      for(int i = 0; i < fileNum; i++){
+        printf("%s\n", files[i]);
+      }
+      // printSorted(root);
     }else if(strcmp(command, "quit") != 0){
       int find = 0;
       for(int i = 0; i < fileNum; i++){
