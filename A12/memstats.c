@@ -5,6 +5,7 @@
 #include <time.h>
 #include <string.h>
 #include "rand.h"
+#include <math.h>
 
 #define ROUNDS 3
 #define BUFFER 5
@@ -17,6 +18,46 @@ struct chunk {
 };
 
 void memstats(struct chunk* freelist, void* buffer[], int len) {
+  int totalBlocks = 0;
+  int freeBlocks = 0;
+  int usedBlocks = 0;
+
+  int totalMemo = 0;
+  int freeMemo = 0;
+  int usedMemo = 0;
+  int underMemo = 0;
+  float rate = 0;
+  if(freelist -> next == NULL){
+    freeBlocks += 1;
+    totalBlocks += 1;
+    freeMemo += freelist -> size;
+    totalMemo += freelist -> size;
+  }else{
+    struct chunk *next = freelist;
+    while(next -> next != NULL){
+      freeBlocks += 1;
+      totalBlocks += 1;
+      freeMemo += next -> size;
+      totalMemo += next -> size;
+      next = next -> next;
+    }
+  }
+
+  for(int i = 0; i < len; i++){
+    if (buffer[i] != NULL){
+      int *memory = buffer[i];
+      struct chunk * cnk = ( struct chunk * ) ( ( struct chunk * ) memory - 1 ) ;
+      usedBlocks += 1;
+      totalBlocks += 1;
+      usedMemo += cnk -> size;
+      totalMemo += cnk -> size;
+      underMemo += (cnk -> size) - (cnk -> used);
+    }
+  }
+  rate = (float)underMemo / (float)totalMemo;
+  printf("Total blocks: %d Free blocks: %d Used blocks: %d\n", totalBlocks, freeBlocks, usedBlocks);
+  printf("Total memory allocated: %d Free memory: %d Used memory: %d\n", totalMemo, freeMemo, usedMemo);
+  printf("Underutilized memory: %.2f\n", rate);
 }
 
 int main ( int argc, char* argv[]) {
